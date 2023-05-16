@@ -19,4 +19,8 @@ RUN apk --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/testi
     ln -sf /usr/bin/php81 /usr/bin/php && \
     rm -rf /var/cache/apk/*
 
+
+RUN mkdir -p /var/www/html && chmod 755 /var/www/html
+RUN mkdir -p /var/log && chmod 777 /var/log
+
 CMD ["php-fpm81", "--nodaemonize"]
