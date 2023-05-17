@@ -1,0 +1,29 @@
+FROM alpine:3.17.3
+
+# Install php with it's basic requirements
+RUN apk --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing add \
+    php81 \
+    php81-pgsql \
+    php81-pdo_pgsql \
+    php81-fpm \
+    php81-pecl-apcu && \
+    ln -sf /usr/bin/php81 /usr/bin/php && \
+    rm -rf /var/cache/apk/*
+
+# Create a specific user instead of using root https://askubuntu.com/questions/873839/what-is-the-www-data-user
+RUN adduser -u 82 -D -S -G www-data www-data
+# FIX the rights problem
+RUN mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html && chmod 755 /var/www/html
+RUN mkdir -p /var/log && chmod 777 /var/log
+
+COPY config /
+
+EXPOSE 9000
+
+# Set the user used
+USER www-data
+
+WORKDIR /var/www
+
+# Start php fpm (--nodaemonize Force to stay in foreground and ignore daemonize option from configuration file. https://linux.die.net/man/8/php-fpm)
+CMD ["php-fpm81", "--nodaemonize"]
