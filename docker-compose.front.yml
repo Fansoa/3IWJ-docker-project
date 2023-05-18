@@ -7,22 +7,27 @@ services:
       - ./docker/php:/var/www/html
     ports: 
       - 8080:80
+    networks:
+      - front-end
 
   php:
     image: cdebray1410/3iwj-docker-project_php
     volumes:
       - ./docker/php:/var/www/html
+    networks:
+      - back-end
+      - front-end
 
   composer:
     image: fdev4docker/3iwj-docker-project-composer-1
     volumes:
       - ./www:/var/www/html/
     command: composer --version
+    networks:
+      - front-end
 
-  adminer:
-    build:
-      context: ./docker/adminer
-    volumes:
-      - ./docker/adminer/adminer-4.8.1.php:/srv/index.php
-    ports:
-      - 81:80
+networks:
+  back-end:
+    name: back-end
+  front-end:
+    name: front-end

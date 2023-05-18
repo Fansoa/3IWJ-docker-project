@@ -1,0 +1,35 @@
+version: '3.18'
+services:
+  adminer:
+    image: cdebray1410/3iwj-docker-project_adminer
+    volumes:
+      - ./docker/adminer/adminer-4.8.1.php:/srv/index.php
+    ports:
+      - 81:80
+    depends_on:
+      - database
+    networks:
+      - back-end
+
+  database:
+    image: postgres
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 82:5432
+    environment:
+      POSTGRES_DB: esgi
+      POSTGRES_USER: esgi
+      POSTGRES_PASSWORD: Test1234
+    networks:
+      - back-end
+
+volumes:
+  pgdata:
+
+networks:
+  back-end:
+    name: back-end
+  front-end:
+    name: front-end

@@ -1,5 +1,6 @@
 FROM alpine:3.17.3
 
+# Fichier adminer-4.8.1.php à télécharger sur https://www.adminer.org/
 # Paramètre par défaut de adminer https://hub.docker.com/r/dockette/adminer
 ENV MEMORY_LIMIT=256M
 ENV UPLOAD_MAX=2048M
