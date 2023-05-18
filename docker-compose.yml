@@ -20,9 +20,38 @@ services:
     command: composer --version
 
   adminer:
-    build:
-      context: ./docker/adminer
+    image: 
     volumes:
       - ./docker/adminer/adminer-4.8.1.php:/srv/index.php
     ports:
       - 81:80
+    depends_on:
+      - database
+    environment:
+      ADMINER_DEFAULT_SERVER: database
+      ADMINER_DEFAULT_USERNAME: esgi
+      ADMINER_DEFAULT_PASSWORD: Test1234
+      ADMINER_DEFAULT_DATABASE: esgi
+    networks:
+      - back-end
+
+  database:
+    image: postgres
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 82:5432
+    environment:
+      POSTGRES_DB: esgi
+      POSTGRES_USER: esgi
+      POSTGRES_PASSWORD: Test1234
+    networks:
+      - back-end
+
+volumes:
+  pgdata:
+
+networks:
+  back-end:
+    name: back-end
