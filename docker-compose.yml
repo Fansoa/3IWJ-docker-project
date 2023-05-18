@@ -9,6 +9,7 @@ services:
       - 8080:80
 
   php:
-    build: ./docker/php
+    # build: ./docker/php
+    image: cdebray1410/3iwj-docker-project_php
     volumes:
       - ./docker/php:/var/www/html
