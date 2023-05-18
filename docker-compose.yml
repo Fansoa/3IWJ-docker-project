@@ -18,3 +18,11 @@ services:
     volumes:
       - ./www:/var/www/html/
     command: composer --version
+
+  adminer:
+    build:
+      context: ./docker/adminer
+    volumes:
+      - ./docker/adminer/adminer-4.8.1.php:/srv/index.php
+    ports:
+      - 81:80

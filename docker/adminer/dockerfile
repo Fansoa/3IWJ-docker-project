@@ -1,0 +1,54 @@
+FROM alpine:3.17.3
+
+# Paramètre par défaut de adminer https://hub.docker.com/r/dockette/adminer
+ENV MEMORY_LIMIT=256M
+ENV UPLOAD_MAX=2048M
+
+RUN apk --no-cache add \
+    tini \
+    php81 \
+    php81-session \
+    php81-pgsql \
+    php81-pdo_pgsql\
+    php81-dev \
+    php81-gd \
+    php81-xmlreader \
+    php81-bcmath \
+    php81-ctype \
+    php81-curl \
+    php81-exif \
+    php81-iconv \
+    php81-intl \
+    php81-mbstring \
+    php81-opcache \
+    php81-openssl \
+    php81-pcntl \
+    php81-phar \
+    php81-xml \
+    php81-xsl \
+    php81-zip \
+    php81-zlib \
+    php81-dom \
+    php81-fpm \
+    php81-sodium \
+    php81-tokenizer \
+    php81-pecl-apcu \
+    postgresql-dev && \
+    ln -sf /usr/bin/php81 /usr/bin/php && \
+    rm -rf /var/cache/apk/*
+# ln -sf /usr/bin/php81 /usr/bin/php . Permet de s'assurer que l'on utilise bien les commande 'php' utiliseront php 8.1
+
+WORKDIR /srv
+EXPOSE 80
+
+# Permet de définir l'utilisation de tini lorsque l'on start le container. Cela permet d'éviter des problèmes de signal et de zombie process.
+# -- permet d'éviter que la suite du code soit interpréter comme des options etc (Le code de CMD par exemple).
+ENTRYPOINT ["/sbin/tini", "--"]
+
+# php -d define an entry. -S run with built-in server. https://www.php.net/manual/fr/features.commandline.options.php
+# memory_limit, upload_max_filesize, post_max_size sont les valeurs par défaut utilisé par adminer
+CMD /usr/bin/php \
+    -d memory_limit=$MEMORY_LIMIT \
+    -d upload_max_filesize=$UPLOAD_MAX \
+    -d post_max_size=$UPLOAD_MAX \
+    -S 0.0.0.0:80
