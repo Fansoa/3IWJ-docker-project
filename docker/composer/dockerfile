@@ -1,6 +1,7 @@
 FROM alpine:3.17.3
 
-RUN apk --repository http://nl.alpinelinux.org/alpine/edge/testing/ add \
+# Instalation des packages requis
+RUN apk add \
     wget \
     curl \
     php81 \
@@ -9,6 +10,7 @@ RUN apk --repository http://nl.alpinelinux.org/alpine/edge/testing/ add \
     php81-iconv \
     php81-phar
 
+# Instalation de composer (télécharge composer puis l'install dans le dossier usr/bin)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer 
 
 RUN mkdir -p /var/www
@@ -21,4 +23,6 @@ VOLUME /var/www
 
 CMD ["/bin/sh"]
 
+# On définit le entrypoint pour être sur que la commande sera lancé au lancement du container
+# -c permet d'indiquer que la suite sera un argument. (/bin/sh" -c echo "test" affichera test)
 ENTRYPOINT ["/bin/sh", "-c"]
