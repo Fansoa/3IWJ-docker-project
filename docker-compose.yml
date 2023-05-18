@@ -7,11 +7,15 @@ services:
       - ./docker/php:/var/www/html
     ports: 
       - 8080:80
+    networks:
+      - back-end
 
   php:
     image: cdebray1410/3iwj-docker-project_php
     volumes:
       - ./docker/php:/var/www/html
+    networks:
+      - back-end
 
   composer:
     image: fdev4docker/3iwj-docker-project-composer-1
@@ -20,18 +24,13 @@ services:
     command: composer --version
 
   adminer:
-    image: 
+    image: cdebray1410/3iwj-docker-project_adminer
     volumes:
       - ./docker/adminer/adminer-4.8.1.php:/srv/index.php
     ports:
       - 81:80
     depends_on:
       - database
-    environment:
-      ADMINER_DEFAULT_SERVER: database
-      ADMINER_DEFAULT_USERNAME: esgi
-      ADMINER_DEFAULT_PASSWORD: Test1234
-      ADMINER_DEFAULT_DATABASE: esgi
     networks:
       - back-end
 
