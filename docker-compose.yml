@@ -9,7 +9,12 @@ services:
       - 8080:80
 
   php:
-    # build: ./docker/php
     image: cdebray1410/3iwj-docker-project_php
     volumes:
       - ./docker/php:/var/www/html
+
+  composer:
+    image: fdev4docker/3iwj-docker-project-composer-1
+    volumes:
+      - ./www:/var/www/html/
+    command: composer --version
